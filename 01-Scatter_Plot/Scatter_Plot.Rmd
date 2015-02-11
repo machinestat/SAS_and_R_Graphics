@@ -20,6 +20,8 @@ ggplot(mtcars, aes(x = disp, y = mpg)) + geom_point() +
     labs(title = "Figure1: A Basic Scatter Plot",
     x = "Displacement (cu.in.)", y = "Miles/(US) gallon")
 
+# Prepare the data set for SAS
+write.table(mtcars, file ="Data/mtcars.txt". row.names = TRUE)
 
 # SAS Code to create the same scatter plot
 #** Read the data;
@@ -54,3 +56,4 @@ ggplot(mtcars, aes(x = disp, y = mpg)) + geom_point() +
 #RUN;
 
 ```
+
