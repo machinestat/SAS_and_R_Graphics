@@ -1,0 +1,33 @@
+---
+title: "Regression Fit Plot"
+author: "Shu Guo"
+date: "Tuesday, February 10, 2015"
+output: pdf_document
+---
+
+## Introduction
+We can add linear or nonlinear regression fit function on the scatter plot, and this will us a first glance of how well our models fit on the data.
+
+## Adding Fitted Regression Model Lines
+Fist, we add a linear regression linear using R. It is very easy to add the linear using ggplot2 package: just add _stat\_smooth()_ and use _method = lm_ :
+```{r, echo=TRUE,cache=TRUE}
+#Load the data
+data(mtcars)
+library(ggplot2)
+#Create and store the scatter plot
+p <- ggplot(mtcars, aes(x = disp, y = mpg)) + geom_point() + 
+    labs(title = "Linear Regression Fit Plot",
+    x = "Displacement (cu.in.)", y = "Miles/(US) gallon")
+
+# Add the regression line, and by a 95% confidence interval was added by default.
+p + stat_smooth(method = lm)
+
+# Change the confidence interval1 : using level
+p + stat_smooth(method= lm, level = 0.99)
+# Change the confidence interval2: disable
+p + stat_smooth(method = lm, se = FALSE)
+
+# Change the color
+p + geom_point(colour = "red") + 
+  stat_smooth(method = lm, se = FALSE, color = "blue")
+```
