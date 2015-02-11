@@ -19,41 +19,41 @@ library(ggplot2)
 ggplot(mtcars, aes(x = disp, y = mpg)) + geom_point() + 
     labs(title = "Figure1: A Basic Scatter Plot",
     x = "Displacement (cu.in.)", y = "Miles/(US) gallon")
+```
 
-# Prepare the data set for SAS
-write.table(mtcars, file ="Data/mtcars.txt". row.names = TRUE)
+SAS Code to create the same scatter plot
 
-# SAS Code to create the same scatter plot
-#** Read the data;
-#Data mtars;
-#    INFILE 'C:\Books\GitHub\SAS_and_R_Graphics\Data\mtcars.txt' FIRSTOBS = 2 DLM =',' DSD;
-#    INPUT Name $ mpg cyl disp hp drat wt qsec vs am gear carb;
-#RUN;
+```
+** Read the data;
+Data mtars;
+    INFILE 'C:\Books\GitHub\SAS_and_R_Graphics\Data\mtcars.txt' FIRSTOBS = 2 DLM =',' DSD;
+    INPUT Name $ mpg cyl disp hp drat wt qsec vs am gear carb;
+RUN;
 
-# Make the plot using PROC SGPLOT.
-#PROC SGPLOT DATA = mtars  ;
-#    TITLE "Figure1: A Basic Scatter Plot";
-#    SCATTER y = mpg x = wt / markerattrs=(symbol=circlefilled color=black);
-#    XAXIS LABEL = "Displacement (cu.in.)";
-#    YAXIS LABEL = "Miles/(US) gallon";
-#RUN;
+*Make the plot using PROC SGPLOT;
+PROC SGPLOT DATA = mtars  ;
+    TITLE "Figure1: A Basic Scatter Plot";
+    SCATTER y = mpg x = wt / markerattrs=(symbol=circlefilled color=black);
+    XAXIS LABEL = "Displacement (cu.in.)";
+    YAXIS LABEL = "Miles/(US) gallon";
+RUN;
 
-# Make the same plot using PROC TEMPALTE AND PROC SGRENDER
-#PROC TEMPLATE;
-#    DEFINE STATGRAPH Classscatter;
-#        BEGINGRAPH;
-#            ENTRYTITLE "Figure1: A Basic Scatter Plot";
-#            LAYOUT OVERLAY /
-#                XAXISOPTS = (LABEL = "Displacement (cu.in.)")
-#                YAXISOPTS = (LABEL = "Miles/(US) gallon");
-#                SCATTERPLOT y = mpg x =wt / 
-#                               markerattrs= (symbol=circlefilled color=black);
-#            ENDLAYOUT;
-#        ENDGRAPH;
-#    END;
-#RUN;
-#PROC SGRENDER DATA = mtars TEMPLATE = Classscatter;
-#RUN;
+*Make the same plot using PROC TEMPALTE AND PROC SGRENDER;
+PROC TEMPLATE;
+    DEFINE STATGRAPH Classscatter;
+        BEGINGRAPH;
+            ENTRYTITLE "Figure1: A Basic Scatter Plot";
+            LAYOUT OVERLAY /
+                XAXISOPTS = (LABEL = "Displacement (cu.in.)")
+                YAXISOPTS = (LABEL = "Miles/(US) gallon");
+                SCATTERPLOT y = mpg x =wt / 
+                               markerattrs= (symbol=circlefilled color=black);
+            ENDLAYOUT;
+        ENDGRAPH;
+    END;
+RUN;
+PROC SGRENDER DATA = mtars TEMPLATE = Classscatter;
+RUN;
 
 ```
 
