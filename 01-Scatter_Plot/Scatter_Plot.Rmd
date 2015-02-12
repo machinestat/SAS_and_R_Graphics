@@ -59,7 +59,9 @@ RUN;
 ```
 
 ## Using Different Shape and Color
-We can change the shape and color on the points in the scatter plots, or group points by another categorical variable using different shape and color. The following table shows the available shapes in R graphics.  
+We can change the shape and color on the points in the scatter plots, or group points by another categorical variable using different shape and color. The following tables shows the available shapes in SAS and R graphics, the first one is for SAS:   
+![alt text](SASmarkers.png)
+
 ![alt text](Shapes.png)  
 
 ```{r}
