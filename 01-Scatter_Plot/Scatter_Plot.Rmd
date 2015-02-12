@@ -16,7 +16,8 @@ Scatter plots are used to display the relationship between two variables. From t
 ## Load the data
 data(mtcars)
 library(ggplot2)
-ggplot(mtcars, aes(x = disp, y = mpg)) + geom_point() + 
+p <- ggplot(mtcars, aes(x = disp, y = mpg)) 
+p + geom_point() + 
     labs(title = "Figure1: A Basic Scatter Plot",
     x = "Displacement (cu.in.)", y = "Miles/(US) gallon")
 ```
@@ -56,9 +57,21 @@ PROC SGRENDER DATA = mtcars TEMPLATE = Classscatter;
 RUN;
 
 ```
-`{r getwd()}`
 
 ## Using Different Shape and Color
-We can change the shape and color on the points in the scatter plots, or group points by another categorical variable using different shape and color. The following table shows the available shapes in R graphics.
+We can change the shape and color on the points in the scatter plots, or group points by another categorical variable using different shape and color. The following table shows the available shapes in R graphics.  
+![alt text](Shapes.png)  
 
-![alt text](Shapes.png)
+```{r}
+# Change the shape of the points
+library(ggplot2)
+ggplot(mtcars, aes(x = disp, y = mpg)) + geom_point(shape = 11)
+# Create two factor variables for shape and color
+mtcars$cyl <- factor(mtcars$cyl)
+mtcars$am <- factor(mtcars$am)
+
+# Use two factor variables for shape and colour
+ggplot(mtcars, aes(x = disp, y = mpg, shape = cyl, colour = am)) +
+  geom_point(size = 3) + scale_shape_manual(values = c(15, 17, 19))
+
+```
