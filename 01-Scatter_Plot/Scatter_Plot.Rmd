@@ -2,7 +2,7 @@
 title: "Scatter Plot Using R and SAS"
 author: "Shu Guo"
 date: "Saturday, February 07, 2015"
-output: pdf_document
+output: html_document
 ---
 
 ## Introduction
@@ -25,13 +25,13 @@ SAS Code to create the same scatter plot
 
 ```
 ** Read the data;
-Data mtars;
+Data mtcars;
     INFILE 'C:\Books\GitHub\SAS_and_R_Graphics\Data\mtcars.txt' FIRSTOBS = 2 DLM =',' DSD;
     INPUT Name $ mpg cyl disp hp drat wt qsec vs am gear carb;
 RUN;
 
 *Make the plot using PROC SGPLOT;
-PROC SGPLOT DATA = mtars  ;
+PROC SGPLOT DATA = mtcars  ;
     TITLE "Figure1: A Basic Scatter Plot";
     SCATTER y = mpg x = wt / markerattrs=(symbol=circlefilled color=black);
     XAXIS LABEL = "Displacement (cu.in.)";
@@ -52,7 +52,7 @@ PROC TEMPLATE;
         ENDGRAPH;
     END;
 RUN;
-PROC SGRENDER DATA = mtars TEMPLATE = Classscatter;
+PROC SGRENDER DATA = mtcars TEMPLATE = Classscatter;
 RUN;
 
 ```
