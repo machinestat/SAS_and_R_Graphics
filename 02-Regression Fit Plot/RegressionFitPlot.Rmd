@@ -30,4 +30,38 @@ p + stat_smooth(method = lm, se = FALSE)
 # Change the color
 p + geom_point(colour = "red") + 
   stat_smooth(method = lm, se = FALSE, color = "blue")
+
+```
+
+We can use SAS to produce similar plots:
+```
+* Create a permanent data set;
+LIBNAME Graphic 'C:\Books\GitHub\SAS_and_R_Graphics\Data';
+
+DATA Graphic.mtcars;
+    SET mtcars;
+RUN;
+
+* Create the plot using PROC SGPLOT with prediction and confidence bands;
+PROC SGPLOT DATA = Graphic.mtcars NOAUTOLEGEND;
+    TITLE 'Linear Regression';
+    REG y = mpg x = wt/ CLM CLI
+                    markerattrs=(symbol=circlefilled color=black);
+RUN;
+
+* Create the plot using PROC TEMPLATE and PROC SGRENDER, with different shape and color for points;
+PROC TEMPLATE;
+    DEFINE STATGRAPH Classreg;
+        BEGINGRAPH;
+            ENTRYTITLE "Linear Regression";
+            LAYOUT OVERLAY;
+                SCATTERPLOT y = mpg x = wt/markerattrs=(symbol = diamondfilled color=blue);
+                REGRESSIONPLOT y = mpg x = wt;
+            ENDLAYOUT;
+        ENDGRAPH;
+    END;
+RUN;
+
+PROC SGRENDER DATA = Graphic.mtcars TEMPLATE = Classreg;
+RUN;
 ```
