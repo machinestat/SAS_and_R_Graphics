@@ -77,3 +77,15 @@ ggplot(mtcars, aes(x = disp, y = mpg, shape = cyl, colour = am)) +
   geom_point(size = 3) + scale_shape_manual(values = c(15, 17, 19))
 
 ```
+
+## Add Labels for the Points in the Plot
+If we only want to add labels for a few points, we can add them manually. The following R code add labels for two points on the scatter plot with different colours.
+
+```{r}
+library(ggplot2)
+p1 <- ggplot(mtcars, aes(x = disp, y = mpg)) + geom_point() + 
+        labs(x = "Displacement (cu.in.)", y = "Miles/(US) gallon")
+p1 + annotate("text", x = c(420, 112), y = c(19.6, 30.4), 
+              label = c("Pontiac Firebird", "Lotus Europa"),
+              colour = c("red", "blue"))
+```
