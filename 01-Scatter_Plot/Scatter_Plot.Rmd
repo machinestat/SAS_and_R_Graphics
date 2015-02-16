@@ -83,9 +83,64 @@ If we only want to add labels for a few points, we can add them manually. The fo
 
 ```{r}
 library(ggplot2)
-p1 <- ggplot(mtcars, aes(x = disp, y = mpg)) + geom_point() + 
+# Get the coordinates of the two points
+x1 <- mtcars$disp[row.names(mtcars) == "Pontiac Firebird"]
+y1 <- mtcars$mpg[row.names(mtcars) == "Pontiac Firebird"]
+x2 <- mtcars$disp[row.names(mtcars) == "Lotus Europa"]
+y2 <- mtcars$mpg[row.names(mtcars) == "Lotus Europa"]
+
+# Make the scattplot
+sp <- ggplot(mtcars, aes(x = disp, y = mpg)) + geom_point() + 
         labs(x = "Displacement (cu.in.)", y = "Miles/(US) gallon")
-p1 + annotate("text", x = c(420, 112), y = c(19.6, 30.4), 
+# Add labels for two points
+sp + annotate("text", x = c(x1, x2) + 35, y = c(y1, y2), 
               label = c("Pontiac Firebird", "Lotus Europa"),
-              colour = c("red", "blue"))
+              colour = c("red", "blue"), size = 3)
+```
+
+I haven't found any code that SAS can add labels for individual points on scatter plots, will add this if I found it later.
+
+Using ggplot, we can automatically add labels for all the data points in the scatter plot. In our data set, we use *geom\_text()* to map the row names the *label* aesthetic. We also need to left or right adjust the labels relative to the points. To left-justify, set hjust = 0, and to right-justify, set vjust = 0.
+```{r}
+sp <- sp + xlim(60, 520)
+# Left-justify
+sp + geom_text(aes(label = row.names(mtcars), size = 2.5), hjust = 0)
+# Add a bit after left-justify
+sp + geom_text(aes(label = row.names(mtcars), x = mtcars$disp + 10, 
+                  size = 2.5), hjust = 0)
+```
+
+And below is the SAS code to produce the similar scatter plots
+```
+* Read the SAS data set;
+Data mtcars;
+    SET 'C:\Books\GitHub\SAS_and_R_Graphics\Data\mtcars';
+RUN;
+
+PROC TEMPLATE;
+    DEFINE STATGRAPH classscatter;
+        BEGINGRAPH;
+            ENTRYTITLE "Mile per gallon By Displacement";
+                LAYOUT OVERLAY /
+                    XAXISOPTS = (offsetmin = 0.05 offsetmax = 0.05 label = "Displacement (cu.in.)"
+                        linearopts=(tickvaluesequence=(start=50 end=500 increment=10) viewmin=30))
+                    YAXISOPTS = (offsetmin = 0.05 offsetmax = 0.05 label = 'Miles/(US) gallon');
+                    SCATTERPLOT y = mpg x = disp / datalabel=name
+                                markerattrs=(symbol=circlefilled color = red size=3px);
+                ENDLAYOUT;
+        ENDGRAPH;
+    END;
+RUN;
+
+PROC SGRENDER DATA = mtcars TEMPLATE = classscatter;
+RUN;
+
+* Using PROC SGPLOT;
+PROC SGPLOT DATA = mtcars  ;
+    TITLE "Mile per gallon By Weight";
+    SCATTER y = mpg x = wt / datalabel = name 
+            markerattrs=(symbol=circlefilled color = blue size = 3px);
+    XAXIS OFFSETMIN = 0.05 OFFSETMAX = 0.05 LABEL = "Weight (lb/1000)";
+    YAXIS OFFSETMIN = 0.05 OFFSETMAX = 0.05 LABEL = "Miles/(US) gallon";
+RUN;
 ```
